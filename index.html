@@ -40,7 +40,7 @@
     .container {
       background: rgba(0, 0, 0, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
       border-radius: 20px;
       padding: 40px 30px;
       width: 90%;
@@ -165,9 +165,7 @@
     }
   </style>
 </head>
-
 <body>
-
   <canvas id="matrix"></canvas>
 
   <div class="container">
@@ -187,86 +185,86 @@
     <div id="responseBox" class="response-box"></div>
   </div>
 
-<script>
-  const fetchButton = document.getElementById("fetchData");
-  const responseBox = document.getElementById("responseBox");
+  <script>
+    const fetchButton = document.getElementById("fetchData");
+    const responseBox = document.getElementById("responseBox");
 
-  fetchButton.addEventListener("click", async () => {
-    const number = document.getElementById("number").value.trim();
-    responseBox.innerHTML = '';
+    fetchButton.addEventListener("click", async () => {
+      const number = document.getElementById("number").value.trim();
+      responseBox.innerHTML = '';
 
-    if (!number) {
-      alert("Please enter a valid number.");
-      return;
-    }
-
-    responseBox.innerHTML = '<p style="text-align:center;">Fetching data...</p>';
-
-    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://famofcfallxd.serv00.net/apis/newsimdata.php?num= ${number}`)}`;
-
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      const apiData = JSON.parse(result.contents);
-
-      if (apiData.status === "success" && apiData.data.length > 0) {
-        let formattedData = '';
-        
-        apiData.data.forEach(user => {
-          formattedData += `
-            <div class="formatted-data">
-              <p><strong>🔹 Name:</strong> ${user.Name || "N/A"}</p>
-              <p><strong>🔹 Mobile:</strong> ${user.Mobile || "N/A"}</p>
-              <p><strong>🔹 CNIC:</strong> ${user.CNIC || "N/A"}</p>
-              <p><strong>🔹 Operator:</strong> ${user.Operator || "N/A"}</p>
-              <p><strong>🔹 Address:</strong> ${user.Address || "N/A"}</p>
-            </div>
-            <div class="separator"></div>
-          `;
-        });
-
-        responseBox.innerHTML = formattedData;
-      } else {
-        responseBox.innerHTML = `<div class="error">❌ No data found for this number</div>`;
+      if (!number) {
+        alert("Please enter a valid number.");
+        return;
       }
-    } catch (error) {
-      responseBox.innerHTML = `<div class="error">❌ API Error: ${error.message}</div>`;
-    }
-  });
-</script>
 
-<!-- Matrix Effect Script -->
-<script>
-  const canvas = document.getElementById("matrix");
-  const ctx = canvas.getContext("2d");
+      responseBox.innerHTML = '<p style="text-align:center;">Fetching data...</p>';
 
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
+      const url = `https://famofcfallxd.serv00.net/apis/newsimdata.php?num=${number}`;
 
-  const letters = "01";
-  const fontSize = 14;
-  const columns = canvas.width / fontSize;
-  const drops = Array.from({ length: columns }).fill(1);
+      try {
+        const response = await fetch(url);
+        const apiData = await response.json();
 
-  function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#0F0";
-    ctx.font = fontSize + "px monospace";
+        if (apiData.status === "success" && apiData.data.length > 0) {
+          let formattedData = '';
 
-    for (let i = 0; i < drops.length; i++) {
-      const text = letters.charAt(Math.floor(Math.random() * letters.length));
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          apiData.data.forEach(user => {
+            formattedData += `
+              <div class="formatted-data">
+                <p><strong>🔹 Name:</strong> ${user.Name || "N/A"}</p>
+                <p><strong>🔹 Mobile:</strong> ${user.Mobile || "N/A"}</p>
+                <p><strong>🔹 CNIC:</strong> ${user.CNIC || "N/A"}</p>
+                <p><strong>🔹 Operator:</strong> ${user.Operator || "N/A"}</p>
+                <p><strong>🔹 Address:</strong> ${user.Address || "N/A"}</p>
+              </div>
+              <div class="separator"></div>
+            `;
+          });
 
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
+          responseBox.innerHTML = formattedData;
+        } else {
+          responseBox.innerHTML = `<div class="error">❌ No data found for this number</div>`;
+        }
+      } catch (error) {
+        responseBox.innerHTML = `<div class="error">❌ API Error: ${error.message}</div>`;
       }
-      drops[i]++;
+    });
+  </script>
+
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "01";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0F0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
     }
-  }
 
-  setInterval(draw, 33);
-</script>
-
+    setInterval(draw, 33);
+  </script>
 </body>
-</html>
+  </html>
+  
